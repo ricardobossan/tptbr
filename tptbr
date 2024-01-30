@@ -1,0 +1,8 @@
+#/usr/bin/bash!
+# TODO: MVC
+# TODO: Opção com gron
+# TODO: Interface console com parâmetros `ler de arquivo`, `texto simples`, `Enviar para área de transferência`
+# TODO: Integra com dmenu
+
+trans -b --no-warn -t pt-BR $TEXTO 
+
