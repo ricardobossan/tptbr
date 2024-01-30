@@ -1,8 +1,59 @@
-#/usr/bin/bash!
-# TODO: MVC
-# TODO: Opção com gron
-# TODO: Interface console com parâmetros `ler de arquivo`, `texto simples`, `Enviar para área de transferência`
+#!/bin/bash
 # TODO: Integra com dmenu
 
-trans -b --no-warn -t pt-BR $TEXTO 
+if ! command -v trans &> /dev/null; then
+  echo "O comando 'trans' não está instalado. Por favor, instale-o antes de continuar."
+  exit 1
+fi
+
+mostrar_opcoes() {
+  echo "Selecione uma opção:"
+  echo "1. Texto simples"
+  echo "2. Ler de arquivo"
+}
+
+traduzir_texto() {
+  local traducao=$1
+  echo "Tradução:"
+  echo "$traducao"
+  while true; do
+    echo "Escolha uma opção:"
+    echo "1. Imprimir tradução"
+    echo "2. Enviar para a área de transferência"
+
+    read -rp "Opção: " OPCAO
+
+    case $OPCAO in
+      1)
+        echo "Tradução:"
+        echo "$traducao"
+        exit
+        ;;
+      2)
+        echo "$traducao" | xclip -selection clipboard
+        echo "Texto traduzido copiado para a área de transferência."
+        exit
+        ;;
+      *)
+        echo "Opção inválida. Por favor, escolha uma opção válida."
+        exit
+        ;;
+    esac
+  done
+}
+
+mostrar_opcoes
+
+read -rp "Opção: " OPCAO
+
+case $OPCAO in
+  1)
+    read -p "Digite o texto a ser traduzido: " TEXTO
+    traduzir_texto "$(trans -b --no-warn -t pt-BR "$TEXTO")"
+    ;;
+  2) 
+    read -rp "Digite o caminho do arquivo: " CAMINHO_ARQUIVO
+    traduzir_texto "$(trans -b --no-warn -t pt-BR -i "$CAMINHO_ARQUIVO")"
+    ;;
+esac
 
